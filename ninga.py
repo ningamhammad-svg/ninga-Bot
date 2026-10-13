@@ -2,44 +2,50 @@ from flask import Flask, request
 import requests, os
 
 app = Flask(__name__)
+VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "NEGRO343")
+WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
+PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
 
-TOKEN = os.environ.get("WHATSAPP_TOKEN")
-PHONE_ID = os.environ.get("PHONE_NUMBER_ID")
-VERIFY_TOKEN = os.environ.get("VERIFY_TOKEN", "NEGRO343")
-
-@app.route("/", methods=["GET"])
+@app.route("/")
 def home():
-    return "Bot iko hai!"
+    return "Ninga Bot is Live! ✅", 200
 
 @app.route("/webhook", methods=["GET"])
 def verify():
-    if request.args.get("hub.verify_token") == VERIFY_TOKEN:
-        return request.args.get("hub.challenge")
-    return "Token si sahihi", 403
+    mode = request.args.get("hub.mode")
+    token = request.args.get("hub.verify_token")
+    challenge = request.args.get("hub.challenge")
+    if mode == "subscribe" and token == VERIFY_TOKEN:
+        return challenge, 200
+    return "Verification failed", 403
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.get_json()
+    print(f"INCOMING: {data}")  # <-- HII NDIO ULIYOZUNGUSHIA, IPO HAPA
     try:
-        msg = data['entry'][0]['changes'][0]['value']['messages'][0]
-        from_num = msg['from']
-        text = msg['text']['body']
-        text_low = text.lower()
-
-        if "habari" in text_low or "mambo" in text_low:
-            reply = "Poa! Karibu Ninga Bot. Andika: bidhaa, bei, au msaada"
-        elif "bidhaa" in text_low:
-            reply = "Tuna: 1. Simu 2. Laptops 3. Vifaa vya umeme"
-        else:
-            reply = f"Umesema: {text}. Andika 'msaada' kwa maelekezo."
-
-        url = f"https://graph.facebook.com/v19.0/{PHONE_ID}/messages"
-        headers = {"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"}
-        payload = {"messaging_product": "whatsapp", "to": from_num, "text": {"body": reply}}
-        requests.post(url, json=payload, headers=headers)
+        if data and data.get("object") == "whatsapp_business_account":
+            for entry in data.get("entry", []):
+                for change in entry.get("changes", []):
+                    value = change.get("value", {})
+                    messages = value.get("messages")
+                    if messages:
+                        for msg in messages:
+                            from_num = msg.get("from")
+                            msg_body = msg.get("text", {}).get("body", "")
+                            print(f"MESSAGE FROM {from_num}: {msg_body}")
+                            send_reply(from_num, f"Poa! Nimepokea: {msg_body}. Bot iko Live ✅")
     except Exception as e:
-        print(e)
-    return "ok", 200
+        print(f"ERROR: {e}")
+    return "OK", 200
+
+def send_reply(to, text):
+    url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
+    headers = {"Authorization": f"Bearer {WHATSAPP_TOKEN}", "Content-Type": "application/json"}
+    payload = {"messaging_product": "whatsapp", "to": to, "type": "text", "text": {"body": text}}
+    r = requests.post(url, headers=headers, json=payload)
+    print(f"SEND REPLY STATUS: {r.status_code} - {r.text}")
+    return r
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
