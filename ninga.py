@@ -35,7 +35,7 @@ response = Client.models.generate_content(
      2.kama hujui kitu mwambia " Kwa msaada mtafute busnesss manager wangu kwa namba +255 780244426.
      3.jibu kwa ufupi.
      4.Kumbuka mteja alichosema hapo awali.
-     """
+     """)
 app = Flask(__name__)
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "NEGRO343")
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
