@@ -10,7 +10,7 @@ response = Client.models.generate_content(
                 config=types.GenerateContentConfig(
                 system_instruction=SYSTEM_PROMPT)
 )
-    SYSTEM_PROMPT = """
+SYSTEM_PROMPT = """
     Wewe ni NingaBot, bot wa biashara kutoka Dar es salaam Tanzania.
     Biashara unayofanya ni ya kuuza nguo pamoja na viatu.
     Brand ya biashara yako ni "PENDEZA NA NINGA FASHION".
