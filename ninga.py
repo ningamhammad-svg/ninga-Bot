@@ -1,15 +1,11 @@
-from flask import Flask, request
+
+ from flask import Flask, jsonify, request
 import requests, os
 from google import genai
 from google.genai import types
 
 Client = genai.Client(api_key="AQ.Ab8RN6Jrmrrs_3l88pYohy3sVPg98Dg3mwKVgbDvo3uFBsANsg") 
-response = Client.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=user_message,
-                config=types.GenerateContentConfig(
-                system_instruction=SYSTEM_PROMPT)
-)
+
 SYSTEM_PROMPT = """
     Wewe ni NingaBot, bot wa biashara kutoka Dar es salaam Tanzania.
     Biashara unayofanya ni ya kuuza nguo pamoja na viatu.
@@ -59,6 +55,7 @@ def verify():
 def webhook():
     data = request.get_json()
     print(f"INCOMING: {data}")  # <-- HII NDIO ULIYOZUNGUSHIA, IPO HAPA
+
     try:
         if data and data.get("object") == "whatsapp_business_account":
             for entry in data.get("entry", []):
@@ -70,10 +67,25 @@ def webhook():
                             from_num = msg.get("from")
                             msg_body = msg.get("text", {}).get("body", "")
                             print(f"MESSAGE FROM {from_num}: {msg_body}")
+    except Exception as e:
+             print(f"ERROR: {e}")     
+             return "Samahani boss. kuna hitilafu kidogo. jaribu tena."                  
 def get_ai_reply(user_message):
     try:
-        response = model.generate_content(user_message)
-        return response.text
+        chat_session = Client.chats.create(
+                       model="gemini-3.8-flash",
+                       history=[
+                           types.Content(
+                               role="user",
+                               parts=[types.Part.from_text(text=user_message)]
+                    )
+                       ],
+                       config=types.GenerateContentConfig(
+                       system_instruction=SYSTEM_PROMPT)
+                   ) 
+        response = chat_session.send_message(user_message)    
+        return jsonify({'reply': response.text}) 
+    
     except Exception as e:
         print(f"ERROR: {e}")
     return "OK", 200
@@ -88,3 +100,4 @@ def send_reply(to, text):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
+
