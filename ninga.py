@@ -37,7 +37,7 @@ SYSTEM_PROMPT = """
 def get_ai_reply(user_message):
     try:
        model = genai.GenerativeModel(
-           model_name="gemini-3.1-Flash-Lite",
+           model_name="gemini-3-Flash",
            system_instruction=SYSTEM_PROMPT
        )
        response = model.generate_content(user_message)
