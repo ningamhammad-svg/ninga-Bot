@@ -69,7 +69,7 @@ def webhook():
                             print(f"MESSAGE FROM {from_num}: {msg_body}")
     except Exception as e:
              print(f"ERROR: {e}")     
-             return "Samahani boss. kuna hitilafu kidogo. jaribu tena."                  
+    return "OK", 200                  
 def get_ai_reply(user_message):
     try:
         chat_session = Client.chats.create(
