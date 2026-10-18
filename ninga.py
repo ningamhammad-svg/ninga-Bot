@@ -3,9 +3,9 @@ from flask import Flask, jsonify, request
 import requests, os
 from google import genai
 from google.genai import types
-
-
-Client = genai.Client(api_key="AQ.Ab8RN6LuM-0Ieb2mF2znYB-kEVYgZ2iE84g4e7XUSWIkyNVMZQ") 
+from dotenv import load_dotenv
+load_dotenv()
+Client = genai.Client(api_key="GEMINI_API_KEY") 
 
 SYSTEM_PROMPT = """
     Wewe ni NingaBot, bot wa biashara kutoka Dar es salaam Tanzania.
@@ -65,7 +65,7 @@ app = Flask(__name__)
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "NEGRO343")
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
 PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
-
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 @app.route("/")
 def home():
     return "Ninga Bot is Live! ✅", 200
