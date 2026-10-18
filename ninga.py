@@ -5,7 +5,7 @@ from google import genai
 from google.genai import types
 
 
-Client = genai.Client(api_key="AQ.Ab8RN6Jrmrrs_3l88pYohy3sVPg98Dg3mwKVgbDvo3uFBsANsg") 
+Client = genai.Client(api_key="AQ.Ab8RN6J6pDbdsdZJ2Em1GdmW3maYFR1lie0admIZrIPwhTS6FQ") 
 
 SYSTEM_PROMPT = """
     Wewe ni NingaBot, bot wa biashara kutoka Dar es salaam Tanzania.
