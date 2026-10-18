@@ -38,9 +38,10 @@ def get_ai_reply(user_message):
     try:
        model = genai.GenerativeModel(
            model_name="gemini-3.8-flash",
-           system_instruction=SYSTEN_PROMPT)
-    response = model.generate_content(user_message)
-        return response.text
+           system_instruction=SYSTEN_PROMPT
+       )
+       response = model.generate_content(user_message)
+       return response.text
     except Exception as e:
         print(f"ERROR: {e}")
         return "kuna hitilafu kidogo ya mtandao bosi"
