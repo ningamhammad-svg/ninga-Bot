@@ -54,7 +54,7 @@ def get_ai_reply(user_message):
         print(f"ERROR: {e}")
     return "kuna hitilafu kidogo ya mtandao bosi"
 
-def send_whstaapp_reply(to, text):
+def send_whatsapp_reply(to, text):
     url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
     headers = {"Authorization": f"Bearer {WHATSAPP_TOKEN}", "Content-Type": "application/json"}
     payload = {"messaging_product": "whatsapp", "to": to, "type": "text", "text": {"body": text}}
