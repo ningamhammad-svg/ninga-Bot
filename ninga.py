@@ -4,6 +4,7 @@ import requests, os
 from google import genai
 from google.genai import types
 
+
 Client = genai.Client(api_key="AQ.Ab8RN6Jrmrrs_3l88pYohy3sVPg98Dg3mwKVgbDvo3uFBsANsg") 
 
 SYSTEM_PROMPT = """
@@ -83,14 +84,14 @@ def get_ai_reply(user_message):
                        config=types.GenerateContentConfig(
                        system_instruction=SYSTEM_PROMPT)
                    ) 
-        response = chat_session.send_message(user_message)    
+        response = chat_send_message(user_message)    
         return jsonify({'reply': response.text}) 
     
     except Exception as e:
         print(f"ERROR: {e}")
-    return "OK", 200
+    return "kuna hitilafu kidogo ya mtandao bosi"
 
-def send_reply(to, text):
+def send_whstaapp_reply(to, text):
     url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
     headers = {"Authorization": f"Bearer {WHATSAPP_TOKEN}", "Content-Type": "application/json"}
     payload = {"messaging_product": "whatsapp", "to": to, "type": "text", "text": {"body": text}}
