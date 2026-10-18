@@ -34,6 +34,33 @@ SYSTEM_PROMPT = """
      3.jibu kwa ufupi.
      4.Kumbuka mteja alichosema hapo awali.
      """
+def get_ai_reply(user_message):
+    try:
+        chat_session = Client.chats.create(
+                       model="gemini-3.8-flash",
+                       history=[
+                           types.Content(
+                               role="user",
+                               parts=[types.Part.from_text(text=user_message)]
+                    )
+                       ],
+                       config=types.GenerateContentConfig(
+                       system_instruction=SYSTEM_PROMPT)
+                   ) 
+        response = chat_session.send_message(user_message)    
+        return  response.text 
+    
+    except Exception as e:
+        print(f"ERROR: {e}")
+    return "kuna hitilafu kidogo ya mtandao bosi"
+
+def send_whstaapp_reply(to, text):
+    url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
+    headers = {"Authorization": f"Bearer {WHATSAPP_TOKEN}", "Content-Type": "application/json"}
+    payload = {"messaging_product": "whatsapp", "to": to, "type": "text", "text": {"body": text}}
+    r = requests.post(url, headers=headers, json=payload)
+    print(f"SEND REPLY STATUS: {r.status_code} - {r.text}")
+    return r
 app = Flask(__name__)
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "NEGRO343")
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
@@ -74,33 +101,7 @@ def webhook():
     except Exception as e:
              print(f"ERROR: {e}")     
     return "OK", 200                  
-def get_ai_reply(user_message):
-    try:
-        chat_session = Client.chats.create(
-                       model="gemini-3.8-flash",
-                       history=[
-                           types.Content(
-                               role="user",
-                               parts=[types.Part.from_text(text=user_message)]
-                    )
-                       ],
-                       config=types.GenerateContentConfig(
-                       system_instruction=SYSTEM_PROMPT)
-                   ) 
-        response = chat_send_message(user_message)    
-        return jsonify({'reply': response.text}) 
-    
-    except Exception as e:
-        print(f"ERROR: {e}")
-    return "kuna hitilafu kidogo ya mtandao bosi"
 
-def send_whstaapp_reply(to, text):
-    url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
-    headers = {"Authorization": f"Bearer {WHATSAPP_TOKEN}", "Content-Type": "application/json"}
-    payload = {"messaging_product": "whatsapp", "to": to, "type": "text", "text": {"body": text}}
-    r = requests.post(url, headers=headers, json=payload)
-    print(f"SEND REPLY STATUS: {r.status_code} - {r.text}")
-    return r
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
