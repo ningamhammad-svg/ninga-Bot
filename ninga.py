@@ -67,9 +67,9 @@ def webhook():
                         for msg in messages:
                             from_num = msg.get("from")
                             msg_body = msg.get("text", {}).get("body", "")
-                            if body:
+                            if msg_body:
                                 print(f"MESSAGE FROM {from_num}: {msg_body}")
-                                reply = get_ai_reply(body)
+                                reply = get_ai_reply(msg_body)
                                 send_whatsapp_reply(from_num, reply)
     except Exception as e:
              print(f"ERROR: {e}")     
