@@ -1,11 +1,11 @@
 
 from flask import Flask, jsonify, request
 import requests, os
-from google import genai
-from google.genai import types
+from google.generativeai as genai
+
 from dotenv import load_dotenv
 load_dotenv()
-Client = genai.Client(api_key=os.getenv("GEMINI_API_KEY")) 
+genai.configure(api_key=os.getenv("GEMINI_API_KEY")) 
 
 SYSTEM_PROMPT = """
     Wewe ni NingaBot, bot wa biashara kutoka Dar es salaam Tanzania.
@@ -36,23 +36,14 @@ SYSTEM_PROMPT = """
      """
 def get_ai_reply(user_message):
     try:
-        chat_session = Client.chats.create(
-                       model="gemini-3.8-flash",
-                       history=[
-                           types.Content(
-                               role="user",
-                               parts=[types.Part.from_text(text=user_message)]
-                    )
-                       ],
-                       config=types.GenerateContentConfig(
-                       system_instruction=SYSTEM_PROMPT)
-                   ) 
-        response = chat_session.send_message(user_message)    
-        return  response.text 
-    
+       model = genai.GenerativeModel(
+           model_name="gemini-3.8-flash",
+           system_instruction=SYSTEN_PROMPT)
+        response = model.generate_content(user_message)
+        return response.text
     except Exception as e:
         print(f"ERROR: {e}")
-    return "kuna hitilafu kidogo ya mtandao bosi"
+        return "kuna hitilafu kidogo ya mtandao bosi"
 
 def send_whatsapp_reply(to, text):
     url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
