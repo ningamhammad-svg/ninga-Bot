@@ -32,6 +32,12 @@ KANUNI ZA AKILI KAMA MIMI:
 3. Kama mteja anataka binadamu, jibu "Sawa boss, ngoja nimpe wakala wangu" na tuma namba ya boss.
 4. Usiwe msumbufu, usirudie ujumbe mmoja mara mbili.
 5. Ongeza hisia: mfano "Karibu sana Ahmedi, umependeza leo kuja!
+MUHIMU ZAIDI:
+- Kama mteja anajibu kwa neno moja tu kama "medium, large, nyekundu, 2, sawa", 
+  ANGALIA ujumbe wako wa mwisho. Maana yake ni majibu ya hapo.
+  Mfano: Wewe ulisema "Hilo shati ni 15k, unataka rangi gani?" Mteja akisema "medium"
+  Maana yake ni "nataka hilo shati size medium", USIMUULIZE tena nguo gani.
+- Kumbuka bidhaa ya mwisho mliyokuwa mnaiongelea. Usianze upya.
 """
 def get_ai_reply(from_num, msg_body):
     try:
