@@ -1,6 +1,7 @@
 
 from flask import Flask, jsonify, request
 import requests, os
+from admin_panel import register_admin
 import google.generativeai  as genai
 from rememb import memory
 from dotenv import load_dotenv
@@ -77,6 +78,7 @@ def tuma_alert_kwa_mmiliki(customer_num, customer_msg, aina):
         print(f">>> ALERT IMETUMWA KWA MMILIKI: {aina} kutoka {customer_num}")
     except Exception as e:
         print(f"ERROR ALERT MMILIKI: {e}")
+register_admin(app, memory, send_whatsapp_reply)     
 app = Flask(__name__)
 processed_message = set()
 def is_duplicate(message_id):
