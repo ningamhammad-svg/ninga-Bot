@@ -90,6 +90,7 @@ VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "NEGRO343")
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
 PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+OWNER_NUMBER = os.getenv("OWNER_NUMBER", "255780244426")
 @app.route("/")
 def home():
     return "Ninga Bot is Live! ✅", 200
