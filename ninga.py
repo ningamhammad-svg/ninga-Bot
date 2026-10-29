@@ -45,7 +45,8 @@ def get_ai_reply(from_num, msg_body):
        chat_session = model.start_chat(history=history)
        response = model.generate_content(msg_body)
        memory.add_message(fro_num, "user", msg_body)
-       memory.add_message(from_num, "model", response.text)return response.text
+       memory.add_message(from_num, "model", response.text)
+       return response.text
         
     except Exception as e:
         print(f"ERROR: {e}")
