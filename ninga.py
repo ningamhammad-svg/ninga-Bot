@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 import requests, os
 import google.generativeai  as genai
-
+from rememb import memory
 from dotenv import load_dotenv
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY")) 
@@ -35,7 +35,7 @@ SYSTEM_PROMPT = """
      4.Kumbuka mteja alichosema hapo awali.
      5.usirudie kutuma ujumbe mmoja zaidi ya mara moja.
      """
-def get_ai_reply(user_message):
+def get_ai_reply(from_num, msg_body):
     try:
        model = genai.GenerativeModel(
            model_name="gemini-3.1-flash-lite",
@@ -101,7 +101,7 @@ def webhook():
                                 if is_duplicate(msg_id):
                                     print(f"DUPLICATE IMEZUIWA: {msg_id}")
                                     continue
-                                reply = get_ai_reply(msg_body)
+                                reply = get_ai_reply(from_num,msg_body)
                                 send_whatsapp_reply(from_num, reply)
     except Exception as e:
              print(f"ERROR: {e}")     
