@@ -134,6 +134,7 @@ def webhook():
                                 tuma_alert_kwa_mmiliki(from_num, msg_body, "ORDER") 
                             elif any(k in lower for k in shida_keywords):
                                 tuma_alert_kwa_mmiliki(from_num, msg_body, "SHIDA") 
+                            else:
                                 reply = get_ai_reply(from_num,msg_body)
                                 send_whatsapp_reply(from_num, reply)
     except Exception as e:
