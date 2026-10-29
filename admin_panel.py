@@ -2,7 +2,7 @@ import json, os
 from flask import render_template_string, request, redirect
 def register_admin(app, memory, send_whatsapp_reply):
     ADMIN_PASSWORD = "Nigro433" 
-ADMIN_HTML = 
+ADMIN_HTML = """
 <h2>PENDEZA Admin - Chats</h2>
 {% for uid, msgs in chats.items() %}
   <div style="border:1px solid #ccc;padding:10px;margin:10px">
@@ -10,7 +10,7 @@ ADMIN_HTML =
     <br><a href="/admin/chat/{{uid}}?p={{pwd}}">Fungua Chat</a>
   </div>
 {% endfor %}
-
+"""
 
 CHAT_HTML = '''
 <h2>Chat na {{uid}} - {{profiles.get(uid, {}).get('name','')}}</h2>
