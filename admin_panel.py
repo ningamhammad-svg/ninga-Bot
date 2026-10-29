@@ -1,7 +1,7 @@
 import json, os
 from flask import render_template_string, request, redirect
 def register_admin(app, memory, send_whatsapp_reply):
-ADMIN_PASSWORD = "Nigro433" 
+    ADMIN_PASSWORD = "Nigro433" 
 ADMIN_HTML = """
 <h2>PENDEZA Admin - Chats</h2>
 {% for uid, msgs in chats.items() %}
