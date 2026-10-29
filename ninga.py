@@ -33,6 +33,7 @@ SYSTEM_PROMPT = """
      2.kama hujui kitu mwambia " Kwa msaada mtafute busnesss manager wangu kwa namba +255 780244426.
      3.jibu kwa ufupi.
      4.Kumbuka mteja alichosema hapo awali.
+     5.usirudie kutuma ujumbe mmoja zaidi ya mara moja.
      """
 def get_ai_reply(user_message):
     try:
@@ -54,6 +55,14 @@ def send_whatsapp_reply(to, text):
     print(f"SEND REPLY STATUS: {r.status_code} - {r.text}")
     return r
 app = Flask(__name__)
+processed_message = set()
+def is_duplicate(message_id):
+    if message_id in processed_message:
+        return True
+    processed_message.add(message_id)
+    if len(processed_message) >100:
+        processed_message.pop()
+    return False
 VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "NEGRO343")
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
 PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
@@ -88,6 +97,9 @@ def webhook():
                             msg_body = msg.get("text", {}).get("body", "")
                             if msg_body:
                                 print(f"MESSAGE FROM {from_num}: {msg_body}")
+                                if is_duplicate(msg_id):
+                                print(f"DUPLICATE IMEZUIWA: {msg_id}")
+                                continue
                                 reply = get_ai_reply(msg_body)
                                 send_whatsapp_reply(from_num, reply)
     except Exception as e:
