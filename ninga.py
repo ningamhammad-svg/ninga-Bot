@@ -98,8 +98,8 @@ def webhook():
                             if msg_body:
                                 print(f"MESSAGE FROM {from_num}: {msg_body}")
                                 if is_duplicate(msg_id):
-                                print(f"DUPLICATE IMEZUIWA: {msg_id}")
-                                continue
+                                    print(f"DUPLICATE IMEZUIWA: {msg_id}")
+                                    continue
                                 reply = get_ai_reply(msg_body)
                                 send_whatsapp_reply(from_num, reply)
     except Exception as e:
