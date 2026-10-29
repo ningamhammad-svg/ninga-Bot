@@ -126,7 +126,7 @@ def webhook():
                                     print(f"DUPLICATE IMEZUIWA: {msg_id}")
                                     continue
                             lower = msg_body.lower()   
-                            order_keywords = ["order", "nitanunua", "namuhitaji boss", "nahitaji delivery", "nataka", "ninataka", "naomba", "nauza", "bei", "nitalipa", 
+                            order_keywords = ["order", "nitanunua", "namuhitaji boss", "nahitaji delivery","malipo", "nataka", "ninataka", "naomba", "nauza", "bei", "nitalipa", 
                                                   "nimeshalipa", "lipa", "nunua", "book", "agiza"] 
                             shida_keywords = ["shida", "haifanyi", "mbovu", "tatizo", "imekataa", "malalamiko", "mwizi", "haijafika",
                                                   "complaint", "help"]
