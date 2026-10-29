@@ -63,6 +63,20 @@ def send_whatsapp_reply(to, text):
     r = requests.post(url, headers=headers, json=payload)
     print(f"SEND REPLY STATUS: {r.status_code} - {r.text}")
     return r
+def tuma_alert_kwa_mmiliki(customer_num, customer_msg, aina):
+    """
+    aina = "ORDER" au "SHIDA"
+    """
+    try:
+        if aina == "ORDER":
+            text = f"🚨 *ORDER MPYA!* 🚨\n\n👤 Mteja: {customer_num}\n📝 Alisema: {customer_msg}\n\nMwangalie haraka kwenye WhatsApp!"
+        else:
+            text = f"⚠️ *SHIDA / MALALAMIKO* ⚠️\n\n👤 Mteja: {customer_num}\n❗ Tatizo: {customer_msg}\n\nInahitaji msaada wako."
+
+        send_whatsapp_reply(OWNER_NUMBER, text)
+        print(f">>> ALERT IMETUMWA KWA MMILIKI: {aina} kutoka {customer_num}")
+    except Exception as e:
+        print(f"ERROR ALERT MMILIKI: {e}")
 app = Flask(__name__)
 processed_message = set()
 def is_duplicate(message_id):
@@ -110,6 +124,14 @@ def webhook():
                                 if is_duplicate(msg_id):
                                     print(f"DUPLICATE IMEZUIWA: {msg_id}")
                                     continue
+                            order_keywords = ["order", "nitanunua", "namuhitaji boss", "nahitaji delivery", "nataka", "ninataka", "naomba", "nauza", "bei", "nitalipa", 
+                                                  "nimeshalipa", "lipa", "nunua", "book", "agiza"] 
+                            shida_keywords = ["shida", "haifanyi", "mbovu", "tatizo", "imekataa", "malalamiko", "mwizi", "haijafika",
+                                                  "complaint", "help"]
+                            if any(k in lower for k in order_keywords):
+                                tuma_alert_kwa_mmiliki(from_num, msg_body, "ORDER") 
+                            elif any(k in lower for k in shida_keywords):
+                                tuma_alert_kwa_mmiliki(from_num, msg_body, "SHIDA") 
                                 reply = get_ai_reply(from_num,msg_body)
                                 send_whatsapp_reply(from_num, reply)
     except Exception as e:
