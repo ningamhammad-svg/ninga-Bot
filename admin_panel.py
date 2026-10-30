@@ -53,7 +53,7 @@ def register_admin(app, memory, send_whatsapp_reply):
                 reply = request.form.get("reply")
             if reply:
                 send_whatsapp_reply(uid, reply)
-                memory.add_message(uid, "model", reply,source="owner")
+                memory.add_message(uid, "model", reply,source="OWNER")
                 data.setdefault("paused_users", {})[uid] = True 
                 json.dump(data, open("memory.json","w"))
             return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
@@ -61,4 +61,4 @@ def register_admin(app, memory, send_whatsapp_reply):
         data = json.load(open("memory.json")) if os.path.exists("memory.json") else {"chats":{}}
         msgs = data.get("chats",{}).get(uid, [])
         profiles = data.get("profiles",{})
-        return render_template_string(CHAT_HTML, uid=uid, msgs=msgs, profiles=profiles, pwd=ADMIN_PASSWORD)
+        return render_template_string(ADMIN_HTML, uid=uid, msgs=msgs, profiles=profiles, pwd=ADMIN_PASSWORD)
