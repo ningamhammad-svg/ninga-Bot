@@ -25,7 +25,6 @@ CHAT_HTML = '''
 </form>
 <br><a href="/admin?p={{pwd}}">Rudi</a>
 '''
-
     @app.route("/admin")
     def admin():
         if request.args.get("p") != ADMIN_PASSWORD: return "Password mbaya ?p=ninga123"
