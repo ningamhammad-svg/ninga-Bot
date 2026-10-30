@@ -78,7 +78,7 @@ def tuma_alert_kwa_mmiliki(customer_num, customer_msg, aina):
         print(f">>> ALERT IMETUMWA KWA MMILIKI: {aina} kutoka {customer_num}")
     except Exception as e:
         print(f"ERROR ALERT MMILIKI: {e}")
-register_admin(app, memory, send_whatsapp_reply)     
+    
 app = Flask(__name__)
 processed_message = set()
 def is_duplicate(message_id):
@@ -139,6 +139,7 @@ def webhook():
                             else:
                                 reply = get_ai_reply(from_num,msg_body)
                                 send_whatsapp_reply(from_num, reply)
+                                register_admin(app, memory, send_whatsapp_reply) 
     except Exception as e:
              print(f"ERROR: {e}")     
     return "OK", 200                  
