@@ -93,6 +93,7 @@ WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
 PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 OWNER_NUMBER = os.getenv("OWNER_NUMBER", "255780244426")
+register_admin(app, memory, send_whatsapp_reply) 
 @app.route("/")
 def home():
     return "Ninga Bot is Live! ✅", 200
@@ -139,7 +140,7 @@ def webhook():
                             else:
                                 reply = get_ai_reply(from_num,msg_body)
                                 send_whatsapp_reply(from_num, reply)
-                                register_admin(app, memory, send_whatsapp_reply) 
+                               
     except Exception as e:
              print(f"ERROR: {e}")     
     return "OK", 200                  
