@@ -26,23 +26,23 @@ CHAT_HTML = '''
 <br><a href="/admin?p={{pwd}}">Rudi</a>
 '''
 
-@app.route("/admin")
-def admin():
-    if request.args.get("p") != ADMIN_PASSWORD: return "Password mbaya ?p=ninga123"
-    data = json.load(open("memory.json")) if os.path.exists("memory.json") else {"chats":{}, "profiles":{}}
-    return render_template_string(ADMIN_HTML, chats=data.get("chats",{}), profiles=data.get("profiles",{}), pwd=ADMIN_PASSWORD)
+    @app.route("/admin")
+    def admin():
+        if request.args.get("p") != ADMIN_PASSWORD: return "Password mbaya ?p=ninga123"
+        data = json.load(open("memory.json")) if os.path.exists("memory.json") else {"chats":{}, "profiles":{}}
+        return render_template_string(ADMIN_HTML, chats=data.get("chats",{}), profiles=data.get("profiles",{}), pwd=ADMIN_PASSWORD)
 
-@app.route("/admin/chat/<uid>", methods=["GET","POST"])
-def admin_chat(uid):
-    if request.args.get("p") != ADMIN_PASSWORD: return "Password mbaya"
-    if request.method == "POST":
-        reply = request.form.get("reply")
-        if reply:
-            send_whatsapp_reply(uid, reply)
-            memory.add_message(uid, "model", reply)
-        return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
+    @app.route("/admin/chat/<uid>", methods=["GET","POST"])
+    def admin_chat(uid):
+        if request.args.get("p") != ADMIN_PASSWORD: return "Password mbaya"
+        if request.method == "POST":
+            reply = request.form.get("reply")
+            if reply:
+                send_whatsapp_reply(uid, reply)
+                memory.add_message(uid, "model", reply)
+            return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
     
-    data = json.load(open("memory.json")) if os.path.exists("memory.json") else {"chats":{}}
-    msgs = data.get("chats",{}).get(uid, [])
-    profiles = data.get("profiles",{})
-    return render_template_string(CHAT_HTML, uid=uid, msgs=msgs, profiles=profiles, pwd=ADMIN_PASSWORD)
+        data = json.load(open("memory.json")) if os.path.exists("memory.json") else {"chats":{}}
+        msgs = data.get("chats",{}).get(uid, [])
+        profiles = data.get("profiles",{})
+        return render_template_string(CHAT_HTML, uid=uid, msgs=msgs, profiles=profiles, pwd=ADMIN_PASSWORD)
