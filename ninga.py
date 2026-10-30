@@ -111,7 +111,12 @@ def verify():
 def webhook():
     data = request.get_json()
     print(f"INCOMING: {data}")  # <-- HII NDIO ULIYOZUNGUSHIA, IPO HAPA
-
+# ndani ya def webhook():
+    data = json.load(open("memory.json")) if os.path.exists("memory.json") else {}
+    if data.get("paused_users", {}).get(user_id):
+        print(f"BOT IMEZUIWA kwa {user_id}, meseji inasave tu")
+        memory.add_message(user_id, "user", user_text)
+        return "OK", 200
     try:
         if data and data.get("object") == "whatsapp_business_account":
             for entry in data.get("entry", []):
