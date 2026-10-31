@@ -43,13 +43,13 @@ def register_admin(app, memory, send_whatsapp_reply):
         if request.args.get("p") != ADMIN_PASSWORD: return "Password mbaya"
         if request.method == "POST":
             reply = request.form.get("reply")
-            if action == "pause":
+            if reply == "pause":
                 data.setdefault("paused_users", {})[uid] = True
                 json.dump(data, open("memory.json","w"))
-            elif action== "resume":
+            elif reply== "resume":
                 data.setdefault("paused_users", {}).pop(uid, None)  
                 json.dump(data, open("memory.json","w"))
-            elif action == "reply":
+            elif reply == "reply":
                 reply = request.form.get("reply")
             if reply:
                 send_whatsapp_reply(uid, reply)
