@@ -110,12 +110,7 @@ def verify():
 @app.route("/webhook", methods=["POST"])
 def webhook():
     data = request.get_json()
-    print(f"INCOMING: {data}")  
-    data = json.load(open("memory.json")) if os.path.exists("memory.json") else {}
-    if data.get("paused_users", {}).get(from_num):
-        print(f"BOT IMEZUIWA kwa {from_num}, meseji inasave tu")
-        memory.add_message(from_num, "user", msg_body)
-        return "OK", 200
+    print(f"INCOMING: {data}") 
     try:
         if data and data.get("object") == "whatsapp_business_account":
             for entry in data.get("entry", []):
@@ -126,6 +121,11 @@ def webhook():
                         for msg in messages:
                             from_num = msg.get("from")
                             msg_body = msg.get("text", {}).get("body", "")
+                            data = json.load(open("memory.json")) if os.path.exists("memory.json") else {}
+                        if data.get("paused_users", {}).get(from_num):
+                            print(f"BOT IMEZUIWA kwa {from_num}, meseji inasave tu")
+                            memory.add_message(from_num, "user", msg_body)
+                            return "OK", 200  
                             if msg_body:
                                 print(f"MESSAGE FROM {from_num}: {msg_body}")
                                 msg_id = msg.get("id")
