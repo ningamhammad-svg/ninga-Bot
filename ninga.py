@@ -76,7 +76,7 @@ Wewe: Poa Juma, moja medium nyekundu 15k. Upo Dar au mkoani nikupangie delivery?
 3.  *Anti-hallucination* - akijua akisema sijui, asitungie bei
 4.  *Sales Flow* - hatapotea, atafunga mauzo
 
-Ibandike hii kwenye system prompt ya bot yako, halafu niambie unatumia platform gani? Boti ya WhatsApp, Telegram au website? Nikupe setting ya kumfanya akumbuke wateja hata kesho na keshokutwa, sio tu kwenye chat moja. 
+
 
 """
 def get_ai_reply(from_num, msg_body):
