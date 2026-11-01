@@ -102,14 +102,14 @@ def save_data(data):
 
 # ROUTE 1: ORODHA YA WATEJA WOTE - Hii ndio mfanyabiashara ataona kwanza
 @app.route("/admin", methods=["GET"])
-    def admin():
-        if request.args.get("p") != ADMIN_PASSWORD: 
+def admin():
+    if request.args.get("p") != ADMIN_PASSWORD: 
             return "Password mbaya ?p=Nigro433"
 
-        data = load_data()
-        chats = data.get("chats", {})
-        paused = data.get("paused_users", {})
-        profiles = data.get("profiles", {})
+    data = load_data()
+    chats = data.get("chats", {})
+     paused = data.get("paused_users", {})
+    profiles = data.get("profiles", {})
 
     # Tengeneza list ya wateja na last message - ndio iwe general
         customers = []
