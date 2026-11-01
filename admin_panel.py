@@ -128,7 +128,7 @@ def admin():
     # Wapange - waliochat karibuni na walio-pause juu
     customers.sort(key=lambda x: (not x['is_paused'], -x['count']))
 
-     return render_template_string(ADMIN_HTML, chats=chats, profiles=profiles, 
+    return render_template_string(ADMIN_HTML, chats=chats, profiles=profiles, 
                                   customers=customers, pwd=ADMIN_PASSWORD)
 
 # ROUTE 2: CHAT YA MTEJA MMOJA - "Chat na 255..."
