@@ -108,7 +108,7 @@ def admin():
 
     data = load_data()
     chats = data.get("chats", {})
-     paused = data.get("paused_users", {})
+    paused = data.get("paused_users", {})
     profiles = data.get("profiles", {})
 
     # Tengeneza list ya wateja na last message - ndio iwe general
