@@ -170,7 +170,6 @@ def webhook():
                                 data = json.load(open("memory.json")) if os.path.exists("memory.json") else {}
                                 if data.get("paused_users", {}).get(from_num):
                                     print(f"BOT IMEZUIWA kwa {from_num}, meseji inasave tu")
-                                    memory.add_message(from_num, "user", msg_body)
                                     return "OK", 200    
                             lower = msg_body.lower()   
                             order_keywords = ["order", "nitanunua", "namuhitaji boss", "nahitaji delivery","malipo", "nataka", "ninataka", "naomba", "nauza", "nitalipa", 
@@ -184,6 +183,7 @@ def webhook():
                             else:
                                 reply = get_ai_reply(from_num,msg_body)
                                 send_whatsapp_reply(from_num, reply)
+                                memory.add_message(from_num, "user", msg_body)
                                
     except Exception as e:
              print(f"ERROR: {e}")     
