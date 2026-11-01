@@ -101,7 +101,7 @@ def save_data(data):
          json.dump(data, open("memory.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
 # ROUTE 1: ORODHA YA WATEJA WOTE - Hii ndio mfanyabiashara ataona kwanza
-    @app.route("/admin", methods=["GET"])
+@app.route("/admin", methods=["GET"])
     def admin():
         if request.args.get("p") != ADMIN_PASSWORD: 
             return "Password mbaya ?p=Nigro433"
