@@ -1,7 +1,6 @@
 
 from flask import Flask, jsonify, request, json
 import requests, os
-from admin_panel import register_admin
 import google.generativeai  as genai
 from rememb import memory
 from dotenv import load_dotenv
@@ -132,6 +131,7 @@ WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
 PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 OWNER_NUMBER = os.getenv("OWNER_NUMBER", "255780244426")
+from admin_panel import register_admin
 register_admin(app, memory, send_whatsapp_reply) 
 @app.route("/")
 def home():
