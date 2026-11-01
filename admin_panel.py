@@ -91,12 +91,6 @@ button{padding:10px 15px;border:none;border-radius:20px;cursor:pointer}
 </html>
 """
 
-  import json, os, time
-from flask import request, render_template_string, redirect
-
-ADMIN_PASSWORD = "ninga123" # password yako
-
-# Helper - kusoma memory salama
 def load_data():
     if os.path.exists("memory.json"):
         try:
@@ -181,6 +175,6 @@ def admin_chat(uid):
     profile = data.get("profiles", {}).get(uid, {})
     is_paused = uid in data.get("paused_users", {})
 
-    return render_template_string(ADMIN_HTML_CHAT, uid=uid, msgs=msgs, 
+    return render_template_string(HTML_CHAT, uid=uid, msgs=msgs, 
                                   profile=profile, is_paused=is_paused, 
                                   pwd=ADMIN_PASSWORD, all_chats=data.get("chats",{}))
