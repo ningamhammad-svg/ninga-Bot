@@ -147,12 +147,14 @@ def admin():
                 save_data(data)
             return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
-            elif action == "resume":
+            elif: 
+                action == "resume":
                 data.setdefault("paused_users", {}).pop(uid, None)
                 save_data(data)
                 return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
-        elif action == "reply":
+        elif:
+            action == "reply":
             # Mfanyabiashara ametuma ujumbe kama mmiliki
             text = request.form.get("text") or request.form.get("message") or request.form.get("reply_text")
             if text and text not in ["pause", "resume", "reply"]:
