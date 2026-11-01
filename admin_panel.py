@@ -112,23 +112,23 @@ def admin():
     profiles = data.get("profiles", {})
 
     # Tengeneza list ya wateja na last message - ndio iwe general
-        customers = []
-        for uid, msgs in chats.items():
-            if not msgs: continue
-            last = msgs[-1]
-            customers.append({
-                "uid": uid,
-                "name": profiles.get(uid, {}).get("name", uid),
-                "last_text": last.get("text", "")[:35],
-                "last_time": last.get("time", ""),
-                "count": len(msgs),
-                "is_paused": uid in paused,
-                "needs_owner": last.get("source") != "OWNER" and "mmiliki" in last.get("text","").lower()
-            })
+    customers = []
+    for uid, msgs in chats.items():
+        if not msgs: continue
+        last = msgs[-1]
+        customers.append({
+            "uid": uid,
+            "name": profiles.get(uid, {}).get("name", uid),
+            "last_text": last.get("text", "")[:35],
+            "last_time": last.get("time", ""),
+            "count": len(msgs),
+            "is_paused": uid in paused,
+            "needs_owner": last.get("source") != "OWNER" and "mmiliki" in last.get("text","").lower()
+        })
     # Wapange - waliochat karibuni na walio-pause juu
-        customers.sort(key=lambda x: (not x['is_paused'], -x['count']))
+    customers.sort(key=lambda x: (not x['is_paused'], -x['count']))
 
-        return render_template_string(ADMIN_HTML, chats=chats, profiles=profiles, 
+     return render_template_string(ADMIN_HTML, chats=chats, profiles=profiles, 
                                   customers=customers, pwd=ADMIN_PASSWORD)
 
 # ROUTE 2: CHAT YA MTEJA MMOJA - "Chat na 255..."
