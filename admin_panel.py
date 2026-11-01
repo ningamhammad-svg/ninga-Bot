@@ -90,16 +90,14 @@ button{padding:10px 15px;border:none;border-radius:20px;cursor:pointer}
 </body>
 </html>
 """
-
-    def load_data():
+def load_data():
         if os.path.exists("memory.json"):
             try:
                 return json.load(open("memory.json", "r", encoding="utf-8"))
             except:
                 return {"chats": {}, "profiles": {}, "paused_users": {}}
         return {"chats": {}, "profiles": {}, "paused_users": {}}
-
-    def save_data(data):
+ def save_data(data):
         json.dump(data, open("memory.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
 # ROUTE 1: ORODHA YA WATEJA WOTE - Hii ndio mfanyabiashara ataona kwanza
