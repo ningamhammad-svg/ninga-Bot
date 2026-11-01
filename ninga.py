@@ -182,8 +182,10 @@ def webhook():
                                 tuma_alert_kwa_mmiliki(from_num, msg_body, "SHIDA") 
                             else:
                                 reply = get_ai_reply(from_num,msg_body)
-                                send_whatsapp_reply(from_num, reply)
+                                memory.add_message(from_num, "bot", reply)
                                 memory.add_message(from_num, "user", msg_body)
+                                send_whatsapp_reply(from_num, reply)
+                               
                                
     except Exception as e:
              print(f"ERROR: {e}")     
