@@ -91,68 +91,68 @@ button{padding:10px 15px;border:none;border-radius:20px;cursor:pointer}
 </html>
 """
 
-def load_data():
-    if os.path.exists("memory.json"):
-        try:
-            return json.load(open("memory.json", "r", encoding="utf-8"))
-        except:
-            return {"chats": {}, "profiles": {}, "paused_users": {}}
-    return {"chats": {}, "profiles": {}, "paused_users": {}}
+    def load_data():
+        if os.path.exists("memory.json"):
+            try:
+                return json.load(open("memory.json", "r", encoding="utf-8"))
+            except:
+                return {"chats": {}, "profiles": {}, "paused_users": {}}
+        return {"chats": {}, "profiles": {}, "paused_users": {}}
 
-def save_data(data):
-    json.dump(data, open("memory.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    def save_data(data):
+        json.dump(data, open("memory.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
 # ROUTE 1: ORODHA YA WATEJA WOTE - Hii ndio mfanyabiashara ataona kwanza
-@app.route("/admin", methods=["GET"])
-def admin():
-    if request.args.get("p") != ADMIN_PASSWORD: 
-        return "Password mbaya ?p=Nigro433"
+    @app.route("/admin", methods=["GET"])
+    def admin():
+        if request.args.get("p") != ADMIN_PASSWORD: 
+            return "Password mbaya ?p=Nigro433"
 
-    data = load_data()
-    chats = data.get("chats", {})
-    paused = data.get("paused_users", {})
-    profiles = data.get("profiles", {})
+        data = load_data()
+        chats = data.get("chats", {})
+        paused = data.get("paused_users", {})
+        profiles = data.get("profiles", {})
 
     # Tengeneza list ya wateja na last message - ndio iwe general
-    customers = []
-    for uid, msgs in chats.items():
-        if not msgs: continue
-        last = msgs[-1]
-        customers.append({
-            "uid": uid,
-            "name": profiles.get(uid, {}).get("name", uid),
-            "last_text": last.get("text", "")[:35],
-            "last_time": last.get("time", ""),
-            "count": len(msgs),
-            "is_paused": uid in paused,
-            "needs_owner": last.get("source") != "OWNER" and "mmiliki" in last.get("text","").lower()
-        })
+        customers = []
+        for uid, msgs in chats.items():
+            if not msgs: continue
+            last = msgs[-1]
+            customers.append({
+                "uid": uid,
+                "name": profiles.get(uid, {}).get("name", uid),
+                "last_text": last.get("text", "")[:35],
+                "last_time": last.get("time", ""),
+                "count": len(msgs),
+                "is_paused": uid in paused,
+                "needs_owner": last.get("source") != "OWNER" and "mmiliki" in last.get("text","").lower()
+            })
     # Wapange - waliochat karibuni na walio-pause juu
-    customers.sort(key=lambda x: (not x['is_paused'], -x['count']))
+        customers.sort(key=lambda x: (not x['is_paused'], -x['count']))
 
-    return render_template_string(ADMIN_HTML, chats=chats, profiles=profiles, 
+        return render_template_string(ADMIN_HTML, chats=chats, profiles=profiles, 
                                   customers=customers, pwd=ADMIN_PASSWORD)
 
 # ROUTE 2: CHAT YA MTEJA MMOJA - "Chat na 255..."
-@app.route("/admin/chat/<uid>", methods=["GET", "POST"])
-def admin_chat(uid):
-    if request.args.get("p") != ADMIN_PASSWORD: 
-        return "Password mbaya"
+    @app.route("/admin/chat/<uid>", methods=["GET", "POST"])
+    def admin_chat(uid):
+        if request.args.get("p") != ADMIN_PASSWORD: 
+            return "Password mbaya"
+ 
+        data = load_data()
 
-    data = load_data()
+        if request.method == "POST":
+            action = request.form.get("reply") # hapa umetumia "reply" kwa action zote
 
-    if request.method == "POST":
-        action = request.form.get("reply") # hapa umetumia "reply" kwa action zote
-
-        if action == "pause":
-            data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin"}
-            save_data(data)
+            if action == "pause":
+                data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin"}
+                save_data(data)
             return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
-        elif action == "resume":
-            data.setdefault("paused_users", {}).pop(uid, None)
-            save_data(data)
-            return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
+            elif action == "resume":
+                data.setdefault("paused_users", {}).pop(uid, None)
+                save_data(data)
+                return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
         elif action == "reply":
             # Mfanyabiashara ametuma ujumbe kama mmiliki
@@ -171,10 +171,10 @@ def admin_chat(uid):
             return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
     # GET - Onyesha chat
-    msgs = data.get("chats", {}).get(uid, [])
-    profile = data.get("profiles", {}).get(uid, {})
-    is_paused = uid in data.get("paused_users", {})
+        msgs = data.get("chats", {}).get(uid, [])
+        profile = data.get("profiles", {}).get(uid, {})
+        is_paused = uid in data.get("paused_users", {})
 
-    return render_template_string(HTML_CHAT, uid=uid, msgs=msgs, 
+        return render_template_string(HTML_CHAT, uid=uid, msgs=msgs, 
                                   profile=profile, is_paused=is_paused, 
                                   pwd=ADMIN_PASSWORD, all_chats=data.get("chats",{}))
