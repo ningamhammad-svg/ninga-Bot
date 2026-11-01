@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, json
 import requests, os
 from admin_panel import register_admin
 import google.generativeai  as genai
