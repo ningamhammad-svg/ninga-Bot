@@ -46,6 +46,7 @@ def register_admin(app, memory, send_whatsapp_reply):
             if reply == "pause":
                 data.setdefault("paused_users", {})[uid] = True
                 json.dump(data, open("memory.json","w"))
+                
             elif reply== "resume":
                 data.setdefault("paused_users", {}).pop(uid, None)  
                 json.dump(data, open("memory.json","w"))
