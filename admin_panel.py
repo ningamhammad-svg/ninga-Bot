@@ -106,7 +106,7 @@ def save_data(data):
 @app.route("/admin", methods=["GET"])
 def admin():
     if request.args.get("p") != ADMIN_PASSWORD: 
-        return "Password mbaya ?p=ninga123"
+        return "Password mbaya ?p="Nigro433"
 
     data = load_data()
     chats = data.get("chats", {})
