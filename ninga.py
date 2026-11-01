@@ -167,6 +167,11 @@ def webhook():
                                 if is_duplicate(msg_id):
                                     print(f"DUPLICATE IMEZUIWA: {msg_id}")
                                     continue
+                                data = json.load(open("memory.json")) if os.path.exists("memory.json") else {}
+                                if data.get("paused_users", {}).get(from_num):
+                                    print(f"BOT IMEZUIWA kwa {from_num}, meseji inasave tu")
+                                    memory.add_message(from_num, "user", msg_body)
+                                    return "OK", 200    
                             lower = msg_body.lower()   
                             order_keywords = ["order", "nitanunua", "namuhitaji boss", "nahitaji delivery","malipo", "nataka", "ninataka", "naomba", "nauza", "nitalipa", 
                                                   "nimeshalipa", "lipa", "nunua", "book", "agiza"] 
