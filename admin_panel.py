@@ -97,8 +97,8 @@ def load_data():
             except:
                 return {"chats": {}, "profiles": {}, "paused_users": {}}
         return {"chats": {}, "profiles": {}, "paused_users": {}}
- def save_data(data):
-        json.dump(data, open("memory.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+def save_data(data):
+         json.dump(data, open("memory.json", "w", encoding="utf-8"), ensure_ascii=False, indent=2)
 
 # ROUTE 1: ORODHA YA WATEJA WOTE - Hii ndio mfanyabiashara ataona kwanza
     @app.route("/admin", methods=["GET"])
