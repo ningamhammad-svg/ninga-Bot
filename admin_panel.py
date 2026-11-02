@@ -1,8 +1,8 @@
 import json, os
 from flask import render_template_string, request, redirect
 def register_admin(app, memory, send_whatsapp_reply):
-    ADMIN_PASSWORD = "Nigro433" 
-    ADMIN_HTML = '''
+ADMIN_PASSWORD = "Nigro433" 
+ADMIN_HTML = '''
 <!DOCTYPE html>
 <html>
 <head><meta name="viewport" content="width=device-width, initial-scale=1">
