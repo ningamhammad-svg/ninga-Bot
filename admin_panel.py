@@ -145,16 +145,16 @@ def register_admin(app, memory, send_whatsapp_reply):
                 if action == "reply":
             # Mfanyabiashara ametuma ujumbe kama mmiliki
                     text = request.form.get("text") or request.form.get("message") or request.form.get("reply_text")
-                if text and text not in ["pause", "resume", "reply"]:
+                    if text and text not in ["pause", "resume", "reply"]:
                 # 1. Tuma WhatsApp kweli
-                    send_whatsapp_reply(uid, text)
+                        send_whatsapp_reply(uid, text)
                 # 2. Hifadhi kwenye chats ili ionekane kwenye admin
-                    data.setdefault("chats", {}).setdefault(uid, []).append({
+                        data.setdefault("chats", {}).setdefault(uid, []).append({
                         "role": "model", "text": text, "source": "OWNER", "time": time.time()
-                    })
+                        })
                 # 3. Pause huyo mteja automaticaly ili bot asimjibu tena
-                    data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin_reply"}
-                    save_data(data)
+                        data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin_reply"}
+                        save_data(data)
 
                 return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
