@@ -1,6 +1,5 @@
 import json, os
 from flask import render_template_string, request, redirect
-def register_admin(app, memory, send_whatsapp_reply):
 ADMIN_PASSWORD = "Nigro433" 
 ADMIN_HTML = '''
 <!DOCTYPE html>
@@ -90,6 +89,7 @@ button{padding:10px 15px;border:none;border-radius:20px;cursor:pointer}
 </body>
 </html>
 """
+def register_admin(app, memory, send_whatsapp_reply):
 # ROUTE 1: ORODHA YA WATEJA WOTE - Hii ndio mfanyabiashara ataona kwanza
     @app.route("/admin", methods=["GET"])
     def admin():
@@ -102,19 +102,19 @@ button{padding:10px 15px;border:none;border-radius:20px;cursor:pointer}
         profiles = data.get("profiles", {})
 
     # Tengeneza list ya wateja na last message - ndio iwe general
-    customers = []
-    for uid, msgs in chats.items():
-        if not msgs: continue
-        last = msgs[-1]
-        customers.append({
+        customers = []
+        for uid, msgs in chats.items():
+            if not msgs: continue
+            last = msgs[-1]
+            customers.append({
             "uid": uid,
-            "name": profiles.get(uid, {}).get("name", uid),
-            "last_text": last.get("text", "")[:35],
-            "last_time": last.get("time", ""),
-            "count": len(msgs),
-            "is_paused": uid in paused,
-            "needs_owner": last.get("source") != "OWNER" and "mmiliki" in last.get("text","").lower()
-        })
+                "name": profiles.get(uid, {}).get("name", uid),
+                "last_text": last.get("text", "")[:35],
+                "last_time": last.get("time", ""),
+                "count": len(msgs),
+                "is_paused": uid in paused,
+                "needs_owner": last.get("source") != "OWNER" and "mmiliki" in last.get("text","").lower()
+            })
     # Wapange - waliochat karibuni na walio-pause juu
     customers.sort(key=lambda x: (not x['is_paused'], -x['count']))
 
