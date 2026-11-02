@@ -127,22 +127,22 @@ def register_admin(app, memory, send_whatsapp_reply):
             if request.args.get("p") != ADMIN_PASSWORD: 
                 return "Password mbaya"
  
-            data = load_data()
+          
 
             if request.method == "POST":
-                action = request.form.get("reply") # hapa umetumia "reply" kwa action zote
+                action = request.form.get("action") # hapa umetumia "reply" kwa action zote
 
-                if reply == "pause":
+                if action == "pause":
                     data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin"}
                     save_data(data)
                     return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
-                if reply == "resume":
+                elif action == "resume":
                     data.setdefault("paused_users", {}).pop(uid, None)
                     save_data(data)
                     return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
-                if reply == "reply":
+                elif action == "reply":
             # Mfanyabiashara ametuma ujumbe kama mmiliki
                     text = request.form.get("text") or request.form.get("message") or request.form.get("reply_text")
                     if text and text not in ["pause", "resume", "reply"]:
