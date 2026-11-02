@@ -167,6 +167,7 @@ def webhook():
                                 if is_duplicate(msg_id):
                                     print(f"DUPLICATE IMEZUIWA: {msg_id}")
                                     continue
+                                memory.add_message(from_num, "user", msg_body)    
                                 data = json.load(open("memory.json")) if os.path.exists("memory.json") else {}
                                 if data.get("paused_users", {}).get(from_num):
                                     print(f"BOT IMEZUIWA kwa {from_num}, meseji inasave tu")
@@ -183,7 +184,6 @@ def webhook():
                             else:
                                 reply = get_ai_reply(from_num,msg_body)
                                 memory.add_message(from_num, "bot", reply)
-                                memory.add_message(from_num, "user", msg_body)
                                 send_whatsapp_reply(from_num, reply)
                                
                                
