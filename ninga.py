@@ -168,8 +168,8 @@ def webhook():
                                     print(f"DUPLICATE IMEZUIWA: {msg_id}")
                                     continue
                                 memory.add_message(from_num, "user", msg_body)    
-                                data = json.load(open("memory.json")) if os.path.exists("memory.json") else {}
-                                if data.get("paused_users", {}).get(from_num):
+                                stored = json.load(open("memory.json")) if os.path.exists("memory.json") else {}
+                                if stored.get("paused_users", {}).get(from_num):
                                     print(f"BOT IMEZUIWA kwa {from_num}, meseji inasave tu")
                                     return "OK", 200    
                             lower = msg_body.lower()   
