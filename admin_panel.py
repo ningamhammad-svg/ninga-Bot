@@ -135,7 +135,7 @@ def register_admin(app, memory, send_whatsapp_reply):
                 if action == "pause":
                     data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin"}
                     save_data(data)
-                return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
+                    return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
                 if action == "resume":
                     data.setdefault("paused_users", {}).pop(uid, None)
