@@ -116,53 +116,53 @@ def register_admin(app, memory, send_whatsapp_reply):
                 "needs_owner": last.get("source") != "OWNER" and "mmiliki" in last.get("text","").lower()
             })
     # Wapange - waliochat karibuni na walio-pause juu
-    customers.sort(key=lambda x: (not x['is_paused'], -x['count']))
+        customers.sort(key=lambda x: (not x['is_paused'], -x['count']))
 
-    return render_template_string(ADMIN_HTML, chats=chats, profiles=profiles, 
+        return render_template_string(ADMIN_HTML, chats=chats, profiles=profiles, 
                                   customers=customers, pwd=ADMIN_PASSWORD)
 
 # ROUTE 2: CHAT YA MTEJA MMOJA - "Chat na 255..."
-    @app.route("/admin/chat/<uid>", methods=["GET", "POST"])
-    def admin_chat(uid):
-        if request.args.get("p") != ADMIN_PASSWORD: 
-            return "Password mbaya"
+        @app.route("/admin/chat/<uid>", methods=["GET", "POST"])
+        def admin_chat(uid):
+            if request.args.get("p") != ADMIN_PASSWORD: 
+                return "Password mbaya"
  
-        data = load_data()
+            data = load_data()
 
-        if request.method == "POST":
-            action = request.form.get("reply") # hapa umetumia "reply" kwa action zote
+            if request.method == "POST":
+                action = request.form.get("reply") # hapa umetumia "reply" kwa action zote
 
-            if action == "pause":
-                data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin"}
-                save_data(data)
-            return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
-
-            if action == "resume":
-                data.setdefault("paused_users", {}).pop(uid, None)
-                save_data(data)
+                if action == "pause":
+                    data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin"}
+                    save_data(data)
                 return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
-            if action == "reply":
-            # Mfanyabiashara ametuma ujumbe kama mmiliki
-                text = request.form.get("text") or request.form.get("message") or request.form.get("reply_text")
-            if text and text not in ["pause", "resume", "reply"]:
-                # 1. Tuma WhatsApp kweli
-                send_whatsapp_reply(uid, text)
-                # 2. Hifadhi kwenye chats ili ionekane kwenye admin
-                data.setdefault("chats", {}).setdefault(uid, []).append({
-                    "role": "model", "text": text, "source": "OWNER", "time": time.time()
-                })
-                # 3. Pause huyo mteja automaticaly ili bot asimjibu tena
-                data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin_reply"}
-                save_data(data)
+                if action == "resume":
+                    data.setdefault("paused_users", {}).pop(uid, None)
+                    save_data(data)
+                    return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
-            return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
+                if action == "reply":
+            # Mfanyabiashara ametuma ujumbe kama mmiliki
+                    text = request.form.get("text") or request.form.get("message") or request.form.get("reply_text")
+                if text and text not in ["pause", "resume", "reply"]:
+                # 1. Tuma WhatsApp kweli
+                    send_whatsapp_reply(uid, text)
+                # 2. Hifadhi kwenye chats ili ionekane kwenye admin
+                    data.setdefault("chats", {}).setdefault(uid, []).append({
+                        "role": "model", "text": text, "source": "OWNER", "time": time.time()
+                    })
+                # 3. Pause huyo mteja automaticaly ili bot asimjibu tena
+                    data.setdefault("paused_users", {})[uid] = {"paused_at": time.time(), "by": "admin_reply"}
+                    save_data(data)
+
+                return redirect(f"/admin/chat/{uid}?p={ADMIN_PASSWORD}")
 
     # GET - Onyesha chat
-        msgs = data.get("chats", {}).get(uid, [])
-        profile = data.get("profiles", {}).get(uid, {})
-        is_paused = uid in data.get("paused_users", {})
+            msgs = data.get("chats", {}).get(uid, [])
+            profile = data.get("profiles", {}).get(uid, {})
+            is_paused = uid in data.get("paused_users", {})
 
-        return render_template_string(HTML_CHAT, uid=uid, msgs=msgs, 
+            return render_template_string(HTML_CHAT, uid=uid, msgs=msgs, 
                                   profile=profile, is_paused=is_paused, 
                                   pwd=ADMIN_PASSWORD, all_chats=data.get("chats",{}))
