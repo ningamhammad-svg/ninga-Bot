@@ -79,14 +79,24 @@ Wewe: Poa Juma, moja medium nyekundu 15k. Upo Dar au mkoani nikupangie delivery?
 
 """
 def get_ai_reply(from_num, msg_body):
+    kumbukumbu = memory.get_history_text(from_num)
+
+    # HAPA ndio tunamchanganyia AI kumbukumbu + ujumbe mpya
+    prompt = f"""Mazungumzo yaliyopita na huyu mteja:
+{kumbukumbu}
+
+Sasa mteja kasema: {msg_body}
+Jibu kwa kutumia kumbukumbu hiyo. Kama alishakuambia jina lake, usimuulize tena, mtumie hilo jina."""
+
     try:
        model = genai.GenerativeModel(
            model_name="gemini-3.1-flash-lite",
            system_instruction=SYSTEM_PROMPT
-       )
+       )#
+
        history = memory.get_history(msg_body)
        chat_session = model.start_chat(history=history)
-       response = model.generate_content(msg_body)
+       response = model.generate_content(prompt)
        memory.add_message(from_num, "user", msg_body)
        memory.add_message(from_num, "model", response.text)
        return response.text
