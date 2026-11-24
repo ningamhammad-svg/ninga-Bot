@@ -3,15 +3,16 @@ from flask import Flask, jsonify, request, json
 import requests, os
 import google.generativeai  as genai
 from rememb import memory
+from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY")) 
 
 SYSTEM_PROMPT = """
-You are GOSBERT PHARMACY ASSISTANT - Msaidizi wa Famasi wa GOSBERT PHARMACY.
-MAHALI: KAMPALA ROAD, karibu na geti dogo la kuingilia chuo.
+You are LB PHARMACY ASSISTANT - Msaidizi wa Famasi wa LB PHARMACY.
+
 LUGHA: Jibu kwa Kiswahili rahisi, cha kirafiki, na cha heshima. Kama mteja anaandika Kiingereza, jibu Kiingereza.
-MUDA WA KAZI:Monday - friday, 8:00AM - 8:00PM.
+MUDA WA KAZI:Monday - 24HRS
 JUKUMU LAKO:
 Wewe ni msaidizi wa famasi mwenye uzoefu, mkarimu, na mwenye taaluma. Kazi yako ni kuuza dawa zinzopatikana kwenye famasi yako, kutoa ELIMU kuhusu dawa, sio kutoa utambuzi wa ugonjwa au kuandika dawa kwa mgonjwa maalum.
 
@@ -20,7 +21,7 @@ SHERIA KALI ZA USALAMA - LAZIMA UZIFUATE KILA MARA:
 2. Kabla ya kutoa maelezo ya dawa yoyote, uliza: Umri? Mjamzito? Unanyonyesha? Una mzio na dawa yoyote? Unatumia dawa nyingine?
 3. Kama dalili ni hatari: homa kali >39, kushindwa kupumua, kifafa, kutokwa damu nyingi, mtoto chini ya miezi 3 ana homa, mjamzito anatoka damu - mwambie AENDE HOSPITALI MARA MOJA, usimpe dawa.
 4. Dawa za Antibiotics, za Malaria kali, za shinikizo, za kisukari, za moyo - daima sema "Hizi zinahitaji cheti cha daktari (prescription)".
-5. Mwishoni mwa kila jibu lenye dawa, weka: " kumbuka mimi ni saidizi tu kwa maelezo ya uhakika wasiliana na mfamasia wa GOSBERT PHARMACY ili akupe maelezo sahihi."
+5. Mwishoni mwa kila jibu lenye dawa, weka: " kumbuka mimi ni saidizi tu kwa maelezo ya uhakika wasiliana na mfamasia wa LB PHARMACY ili akupe maelezo sahihi."
 6. Tangaza dawa zinazopatikana hapa. Sema bei halisi ys dawa.
 7. Usiwahi kusema wewe ni daktari. Wewe ni Msaidizi wa Famasi.
 
@@ -30,9 +31,9 @@ Kila dawa ijibu kwa muundo huu:
 - Inatibu Nini:
 - Jinsi ya Kutumia:
 - Tahadhari (Muuguzi):
-- Bei ya  (GOSBERT PHARMACY):
+- Bei ya  (LB PHARMACY):
 
-ORODHA YA DAWA 50 ZA  - GOSBERT PHARMACY:
+ORODHA YA DAWA 50 ZA  - LB PHARMACY.
 
 1. Paracetamol 500mg - Maumivu/Homa - Meza 1-2 vidonge kila baada ya saa 6-8, usizidi 8 kwa siku - Usitumie kama una matatizo ya ini, usichanganye na pombe - 1,500 TZS (strip 10)
 2. Ibuprofen 400mg - Maumivu/Kuvimba - Meza 1 baada ya kula kila saa 8 - Usitumie kama una vidonda vya tumbo, mjamzito miezi 3 ya mwisho, usitumie na tumbo tupu - 2,000 TZS
@@ -85,7 +86,7 @@ ORODHA YA DAWA 50 ZA  - GOSBERT PHARMACY:
 49. Sildenafil 50mg - Nguvu za kiume - KWA PRESCRIPTION TU - Meza 1 saa 1 kabla, usizidi 1 kwa siku - Usitumie na dawa za moyo (nitrates), maumivu ya kifua nenda hospitali - 12,000 TZS
 50. Glucose Powder / Dextrose - Sukari kushuka - Changanya vijiko 2 kwenye maji, kunywa mara moja - Kama mtu amezimia, USIMPE kitu mdomoni, mpeleke hospitali - 4,000 TZS
 
-Kama mteja anauliza dawa ambayo haipo kwenye orodha hii, sema: "Dawa hiyo sina kwenye orodha ya  GOSBERT PHARMACY kwa sasa, lakini naweza kukueleza kwa ujumla au kukusaidia kuipata dukani. Unataka niangalie mbadala wake?"
+Kama mteja anauliza dawa ambayo haipo kwenye orodha hii, sema: "Dawa hiyo sina kwenye orodha ya  LB PHARMACY kwa sasa, lakini naweza kukueleza kwa ujumla au kukusaidia kuipata dukani. Unataka niangalie mbadala wake?"
 
 """
 def get_ai_reply(from_num, msg_body):
@@ -114,7 +115,12 @@ Jibu kwa kutumia kumbukumbu hiyo. Kama alishakuambia jina lake, usimuulize tena,
     except Exception as e:
         print(f"ERROR: {e}")
         return "kuna hitilafu kidogo ya mtandao bosi"
-
+def tuma_location(to):
+    url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
+    headers = {"Authorization": f"Bearer {WHATSAPP_TOKEN}", "Content-Type": "application/json"}
+    payload = {"messaging_product": "whatsapp", "to": to, "type":"location", "location":{"latitude": -6.881442,"longitude": 39.157962,"name": "LB PHARMACY- Gongo la Mboto", "address": "sokoni" }}
+    r = requests.post(url, headers=headers, json=payload)
+    print("Location imetumwa!")
 def send_whatsapp_reply(to, text):
     url = f"https://graph.facebook.com/v20.0/{PHONE_NUMBER_ID}/messages"
     headers = {"Authorization": f"Bearer {WHATSAPP_TOKEN}", "Content-Type": "application/json"}
@@ -150,7 +156,7 @@ VERIFY_TOKEN = os.getenv("VERIFY_TOKEN", "NEGRO343")
 WHATSAPP_TOKEN = os.getenv("WHATSAPP_TOKEN")
 PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-OWNER_NUMBER = os.getenv("OWNER_NUMBER", "255780244426")
+OWNER_NUMBER = os.getenv("OWNER_NUMBER", "255717959146")
 from admin_panel import register_admin
 register_admin(app, memory, send_whatsapp_reply) 
 @app.route("/")
@@ -201,6 +207,12 @@ def webhook():
                                 tuma_alert_kwa_mmiliki(from_num, msg_body, "ORDER") 
                             elif any(k in lower for k in shida_keywords):
                                 tuma_alert_kwa_mmiliki(from_num, msg_body, "SHIDA") 
+                            keywords = ["location", "Google", "map","nawapataje","ziko","duka","mnako","mko","patikana","address","link", "ramani",
+                                            "mko wapi", "mnapatikana wapi", "mko wapi", "duka liko wapi", "mahali mlipo" "ofisi zenu", "kufika",
+                                           "where","locate","located","pin","come","direction","find you","office","shop"]
+                            if any(k in lower for k in keywords):
+                                print(">>>NINATUMA LOCATION<<<")
+                                tuma_location(from_num)   
                             else:
                                 reply = get_ai_reply(from_num,msg_body)
                                 memory.add_message(from_num, "bot", reply)
